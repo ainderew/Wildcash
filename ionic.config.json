@@ -1,0 +1,7 @@
+{
+    "name": "WildCash",
+    "integrations": {
+      "capacitor": {}
+    },
+    "type": "react"
+  }
