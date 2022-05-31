@@ -9,6 +9,7 @@ import LoginInput from "../components/login-input";
 import Loading from "../components/loading";
 
 import { fadeInUp, staggeredContainer } from "../variants";
+import ModalInvalidLogin from "../components/modals/modal-invalid-login";
 
 const LoginPage: React.FC = () => {
 const navigate = useNavigate()
@@ -18,10 +19,20 @@ const navigate = useNavigate()
   const [userIdNum, setUserIdNum] = useState<string>("");
   const [pass, setPass] = useState<string>("");
   const [loadingFlag, setLoadingFlag] = useState<boolean>(false);
+  const [invalidLoginFlag, setInvalidLoginFlag] = useState<boolean>(false);
+
 
   const toggleLoading = (): void => {
     setLoadingFlag((prev) => !prev);
   };
+
+  const toggleInvalidLoginFlag = () =>{
+    setInvalidLoginFlag(true);
+
+    setTimeout(() =>{
+      setInvalidLoginFlag(false)
+    },2000)
+  }
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -51,7 +62,7 @@ const navigate = useNavigate()
       .then((data) => {
         toggleLoading();
         if (data.length === 0){
-          alert("Invalid Login")
+          toggleInvalidLoginFlag();
           return;
         }
         //handle login response
@@ -69,6 +80,7 @@ const navigate = useNavigate()
       className="w-full min-h-screen grid grid-rows-[40vh_1fr]"
     >
       {loadingFlag ? <Loading /> : null}
+      {invalidLoginFlag ? <ModalInvalidLogin /> : null}
 
       <div className="p-11  bosrder-2 border-black">
         <motion.img
