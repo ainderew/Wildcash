@@ -50,6 +50,10 @@ const navigate = useNavigate()
       .then((response) => response.json())
       .then((data) => {
         toggleLoading();
+        if (data.length === 0){
+          alert("Invalid Login")
+          return;
+        }
         //handle login response
         console.log(data);
         navigate("/home");
