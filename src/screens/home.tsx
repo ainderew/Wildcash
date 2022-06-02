@@ -12,15 +12,15 @@ const Home: React.FC = () => {
     variants={fadeInUp}
     initial="initial"
     animate="animate"
-    className="w-full h-screen grid grid-rows-[6rem_1fr_1fr] gap-6">
+    className="w-full h-screen grid grid-rows-[4rem_2fr_1fr] gap-6">
       <HomeHeader />
 
       <div className="flex flex-col gap-4 overflow-y-hidden px-8 shadow-[inset_0px_-5px_4px_rgba(0,0,0,0.25)] relative">
-        <div className="">
+        <div className="flex flex-col items-center">
           <p className="text-base text-gray-400 font-medium">
             Available Points
           </p>
-          <p className="points text-4xl font-semibold text-accent">2805</p>
+          <p className="points text-3xl font-semibold text-accent">2805</p>
         </div>
 
         <div className="w-full h-full flex flex-col gap-4  z-[0]">
@@ -38,7 +38,7 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      <div className="w-full h-full grid grid-rows-[1fr_1fr_2fr] gap-6 px-8 pb-6">
+      <div className="w-full h-full grid grid-rows-[1fr_1fr] gap-6 px-8 pb-6">
         <div className="flex items-center gap-4 px-4 border-4 border-dotted border-gray-500">
             <img src={scan_qr} alt="" className="" />
             <div className="flex flex-col">
@@ -48,16 +48,16 @@ const Home: React.FC = () => {
         </div>
 
         <div className="buttons-container grid grid-cols-4 gap-5">
+            <ButtonFunction redirectTo="sendPoints" />
+            {/* <ButtonFunction />
             <ButtonFunction />
-            <ButtonFunction />
-            <ButtonFunction />
-            <ButtonFunction />
+            <ButtonFunction /> */}
         </div>
 
-        <div className="buttons-container bosrder-2 border-green-500">
+        {/* <div className="buttons-container bosrder-2 border-green-500">
             <p className="font-semibold text-gray-500">Free Drink Stamp</p>
             <p className="text-xs text-gray-500">Get a free drink at the canteen once you attend 6 events</p>
-        </div>
+        </div> */}
       </div>
     </motion.div>
   );

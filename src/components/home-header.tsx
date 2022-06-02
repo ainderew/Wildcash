@@ -3,7 +3,7 @@ import user from "../assets/user_circle.svg";
 const HomeHeader: React.FC = () => {
   return (
     <div className="w-full h-full px-8 border-b-[2px] border-gray-200 flex justify-between items-center gap-2">
-      <img src={user} alt="" className="img-user " />
+      <img src={user} alt="" className="img-user w-10" />
 
       <div className="idnumber-container flex-grow">
         <p className="">
