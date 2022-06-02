@@ -9,7 +9,7 @@ import scan_qr from "../assets/scan_qr.svg";
 import id_img from "../assets/id_img.svg"
 
 const SendPointsPage: React.FC = () => {
-  const [points, setPoints] = useState<number>(2805);
+  const [points] = useState<number>(2805);
 
   const navigate = useNavigate();
   const handleBack = ():void =>{
