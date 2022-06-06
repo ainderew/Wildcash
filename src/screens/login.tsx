@@ -11,7 +11,7 @@ import Loading from "../components/loading";
 import { fadeInUp, staggeredContainer } from "../variants";
 import ModalInvalidLogin from "../components/modals/modal-invalid-login";
 
-const LoginPage: React.FC = () => {
+const LoginScreen: React.FC = () => {
 const navigate = useNavigate()
 
   const ENDPOINT_LOGIN = "https://wildcash-authserver.onrender.com/login"; //reminder set to secret
@@ -126,4 +126,4 @@ const navigate = useNavigate()
   );
 };
 
-export default LoginPage;
+export default LoginScreen;

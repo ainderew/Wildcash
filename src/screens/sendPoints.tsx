@@ -8,7 +8,7 @@ import back_arrow from "../assets/back_arrow.svg";
 import scan_qr from "../assets/scan_qr.svg";
 import id_img from "../assets/id_img.svg"
 
-const SendPointsPage: React.FC = () => {
+const SendPointsScreen: React.FC = () => {
   const [points] = useState<number>(2805);
 
   const navigate = useNavigate();
@@ -46,4 +46,4 @@ const SendPointsPage: React.FC = () => {
   );
 };
 
-export default SendPointsPage;
+export default SendPointsScreen;
