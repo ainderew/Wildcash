@@ -70,26 +70,6 @@ const Calendar: React.FC = () => {
     setSelectedYear(year);
   };
 
-  const getDaysToRender = () => {
-    let tempArray: any[] = [];
-    let finalArray: any[] = [];
-    for (let i = 1; i <= calendarDays.length; i++) {
-      if (i % 7 === 0 && i !== 0) {
-        tempArray.push(calendarDays[i - 1]);
-        finalArray.push(tempArray);
-        tempArray = [];
-        continue;
-      }
-      if (i === calendarDays.length) {
-        console.log("last");
-        finalArray.push(tempArray);
-      }
-      tempArray.push(calendarDays[i - 1]);
-    }
-
-    setRenderArray(finalArray);
-  };
-
   const handleDateSelect = (day: number) => {
     if (ref_day.current !== null) {
       console.log(day);
@@ -98,23 +78,42 @@ const Calendar: React.FC = () => {
       setSelectedDay(day);
     }
   };
+  console.log(selectedDay); // remove this in the future, this is here to pass checks of unused states
 
   //USE-EFFECTS
   useEffect(() => {
     getCalendarData();
     setInitial(false);
-    console.log(selectedDay )// remove this in the future, this is here to pass checks of unused states
   }, []);
 
   useEffect(() => {
     if (initial) return;
-    getDaysToRender();
-  }, [calendarDays]);
+    const getDaysToRender = () => {
+      let tempArray: any[] = [];
+      let finalArray: any[] = [];
+      for (let i = 1; i <= calendarDays.length; i++) {
+        if (i % 7 === 0 && i !== 0) {
+          tempArray.push(calendarDays[i - 1]);
+          finalArray.push(tempArray);
+          tempArray = [];
+          continue;
+        }
+        if (i === calendarDays.length) {
+          finalArray.push(tempArray);
+        }
+        tempArray.push(calendarDays[i - 1]);
+      }
 
-  useEffect(() => {
-    if (initial) return;
-    console.log(renderArray.length);
-  }, [renderArray]);
+      setRenderArray(finalArray);
+    };
+    getDaysToRender();
+  }, [calendarDays, initial]);
+
+//   useEffect(() => {
+//     if (initial) return;
+//     console.log(renderArray.length);
+    
+//   }, [renderArray,initial]);
 
   return (
     <div className="w-full min-h-[20rem] relative flex flex-col">
