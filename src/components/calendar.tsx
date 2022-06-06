@@ -103,6 +103,7 @@ const Calendar: React.FC = () => {
   useEffect(() => {
     getCalendarData();
     setInitial(false);
+    console.log(selectedDay )// remove this in the future, this is here to pass checks of unused states
   }, []);
 
   useEffect(() => {
