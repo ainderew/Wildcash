@@ -3,6 +3,7 @@ import AdminScreen from "./screens/admin";
 import CreateEventScreen from "./screens/createEvent";
 import Home from "./screens/home";
 import LoginScreen from "./screens/login";
+import ScanScreen from "./screens/scan";
 import SendPointsScreen from "./screens/sendPoints";
 import Splash from "./screens/splash";
 
@@ -16,6 +17,7 @@ const MainContainer:React.FC = () =>{
             <Route path="/Admin" element={<AdminScreen />} />
             <Route path="/SendPoints" element={<SendPointsScreen />} />
             <Route path="/CreateEvent" element={<CreateEventScreen />} />
+            <Route path="/scan" element={<ScanScreen />} />
         </Routes>
     </Router>
     )

@@ -6,22 +6,23 @@ import SendButtonsContainer from "../components/send-button-container";
 import points_logo from "../assets/points_logo.svg";
 import back_arrow from "../assets/back_arrow.svg";
 import scan_qr from "../assets/scan_qr.svg";
-import id_img from "../assets/id_img.svg"
+import id_img from "../assets/id_img.svg";
 
 const SendPointsScreen: React.FC = () => {
   const [points] = useState<number>(2805);
 
   const navigate = useNavigate();
-  const handleBack = ():void =>{
-      navigate("/home")
-  }
+  const handleBack = (): void => {
+    navigate("-1");
+  };
 
+  const handleSendThroughQR = () => {
+    navigate("/scan");
+  };
   return (
     <div className="w-full h-screen grid grid-rows-[4rem_1fr] px-4">
       <div className="header flex justify-between items-center relative">
-        <img 
-        onClick={handleBack}
-        src={back_arrow} alt="" className="" />
+        <img onClick={handleBack} src={back_arrow} alt="" className="" />
         <p className="text-accent absolute left-1/2 -translate-x-1/2">
           Send Points
         </p>
@@ -38,8 +39,16 @@ const SendPointsScreen: React.FC = () => {
           </div>
         </div>
         <div className="flex flex-col gap-4 ">
-          <SendButtonsContainer img={scan_qr} label="Scan QR Code" destination="scanQR" />
-          <SendButtonsContainer img={id_img} label="Send via ID number" destination="idSend" />
+          <SendButtonsContainer
+            destination={"scan"}
+            img={scan_qr}
+            label="Scan QR Code"
+          />
+          <SendButtonsContainer
+            img={id_img}
+            label="Send via ID number"
+            destination="idSend"
+          />
         </div>
       </div>
     </div>

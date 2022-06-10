@@ -1,13 +1,28 @@
 import { useEffect, useState, useRef } from "react";
 
-const Calendar: React.FC = () => {
+interface props {
+  selectedDay: number;
+  selectedMonth: number;
+  selectedYear: number;
+
+  setSelectedDay: Function;
+  setSelectedMonth: Function;
+  setSelectedYear: Function;
+}
+
+const Calendar: React.FC<props> = ({
+  selectedDay,
+  selectedMonth,
+  selectedYear,
+  setSelectedDay,
+  setSelectedMonth,
+  setSelectedYear,
+}: props) => {
   //USE-STATE
+  const [initial, setInitial] = useState<boolean>(true);
+
   const [calendarDays, setCalendarDays] = useState<(string | number)[]>([]);
   const [renderArray, setRenderArray] = useState<any>([]);
-  const [initial, setInitial] = useState<boolean>(true);
-  const [selectedDay, setSelectedDay] = useState<number | number>();
-  const [selectedMonth, setSelectedMonth] = useState<number>(0);
-  const [selectedYear, setSelectedYear] = useState<number>();
 
   const [monthsArray] = useState<string[]>([
     "January",
@@ -78,12 +93,13 @@ const Calendar: React.FC = () => {
       setSelectedDay(day);
     }
   };
-  console.log(selectedDay); // remove this in the future, this is here to pass checks of unused states
 
   //USE-EFFECTS
   useEffect(() => {
     getCalendarData();
     setInitial(false);
+
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -109,11 +125,11 @@ const Calendar: React.FC = () => {
     getDaysToRender();
   }, [calendarDays, initial]);
 
-//   useEffect(() => {
-//     if (initial) return;
-//     console.log(renderArray.length);
-    
-//   }, [renderArray,initial]);
+  //   useEffect(() => {
+  //     if (initial) return;
+  //     console.log(renderArray.length);
+
+  //   }, [renderArray,initial]);
 
   return (
     <div className="w-full min-h-[20rem] relative flex flex-col">

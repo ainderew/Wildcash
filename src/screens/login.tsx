@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+
+import AuthContext from "../context/authContext";
 
 import logo from "../assets/logo.svg";
 import user from "../assets/user.svg";
@@ -12,7 +14,8 @@ import { fadeInUp, staggeredContainer } from "../variants";
 import ModalInvalidLogin from "../components/modals/modal-invalid-login";
 
 const LoginScreen: React.FC = () => {
-const navigate = useNavigate()
+  // const { setAuth } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const ENDPOINT_LOGIN = "https://wildcash-authserver.onrender.com/login"; //reminder set to secret
 
@@ -21,18 +24,17 @@ const navigate = useNavigate()
   const [loadingFlag, setLoadingFlag] = useState<boolean>(false);
   const [invalidLoginFlag, setInvalidLoginFlag] = useState<boolean>(false);
 
-
   const toggleLoading = (): void => {
     setLoadingFlag((prev) => !prev);
   };
 
-  const toggleInvalidLoginFlag = () =>{
+  const toggleInvalidLoginFlag = () => {
     setInvalidLoginFlag(true);
 
-    setTimeout(() =>{
-      setInvalidLoginFlag(false)
-    },2000)
-  }
+    setTimeout(() => {
+      setInvalidLoginFlag(false);
+    }, 2000);
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -49,7 +51,6 @@ const navigate = useNavigate()
       password: pass,
     };
 
-
     fetch(ENDPOINT_LOGIN, {
       mode: "cors",
       method: "POST",
@@ -61,14 +62,14 @@ const navigate = useNavigate()
       .then((response) => response.json())
       .then((data) => {
         toggleLoading();
-        if (data.length === 0){
+
+        if (data.code === Error) {
           toggleInvalidLoginFlag();
           return;
         }
         //handle login response
         console.log(data);
         navigate("/home");
-
       });
   };
 

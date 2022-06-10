@@ -1,15 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
 
-import MainContainer from "./main-container"
+import MainContainer from "./main-container";
+import { AuthProvider } from "./context/authContext";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <MainContainer />
+    <AuthProvider>
+      <MainContainer />
+    </AuthProvider>
   </React.StrictMode>
 );
 
