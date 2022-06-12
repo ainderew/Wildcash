@@ -46,7 +46,6 @@ const ScanScreen: React.FC = () => {
           <QrReader
             onScan={handleScan}
             onError={handleError}
-            // className="h-screen"
             style={{
               width: "100%",
             }}
