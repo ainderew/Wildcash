@@ -15,7 +15,7 @@ import scan_qr from "../assets/scan_qr.svg";
 import Loading from "../components/loading";
 
 const Home: React.FC = () => {
-  const { auth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [events, setEvents] = useState<any[]>([]);
@@ -23,6 +23,33 @@ const Home: React.FC = () => {
   const [loadingFlag, setLoadingFlag] = useState<boolean>(true);
 
   useEffect(() => {
+    const getUser = () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "")
+      // const ENDPOINT_EVENTS = "http://localhost:9000/user/acc-info"; //reminder set to secret
+      const ENDPOINT_EVENTS = "https://wildcash.onrender.com/user/acc-info"; //reminder set to secret
+
+      fetch(ENDPOINT_EVENTS, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          Accept: "Application/json",
+          "Content-Type": "Application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setAuth([{accessToken: accessToken}, data]);
+          setLoadingFlag(false);
+ 
+        })
+        .catch((err) => {
+          
+          console.log(err);
+        });
+    };
+
     const getEvents = () => {
       const ENDPOINT_EVENTS = "https://wildcash.onrender.com/event/get-events"; //reminder set to secret
 
@@ -44,7 +71,15 @@ const Home: React.FC = () => {
     };
 
     getEvents();
+    getUser();
+
+    //eslint-disable-next-line
   }, []);
+
+  if (loadingFlag) {
+    return <Loading />;
+  }
+
   return (
     <motion.div
       variants={fadeInUp}
@@ -67,7 +102,7 @@ const Home: React.FC = () => {
         <div className="w-full h-full flex flex-col gap-4  z-[0] relative">
           <p className="text-gray-400 font-medium">Upcoming Events</p>
           {loadingFlag ? (
-            <Loading />
+            <p className="">Loading...</p>
           ) : (
             <div className="w-full h-full grid auto-rows-[4.5rem] gap-4 overflow-scroll">
               {events.map((el: any, index: number) => {
@@ -80,7 +115,7 @@ const Home: React.FC = () => {
 
       <div className="w-full h-full grid grid-rows-[1fr_1fr] gap-10 px-8 pb-6">
         <div
-          onClick={() => navigate("/scan")}
+          onClick={() => navigate("/scanEvent")}
           className="flex items-center gap-4 px-4 border-4 border-dotted border-gray-500"
         >
           <img src={scan_qr} alt="" className="" />
@@ -95,14 +130,14 @@ const Home: React.FC = () => {
         <div className="buttons-container grid grid-cols-4 gap-5">
           <ButtonFunction redirectTo="sendPoints" />
           {/* <ButtonFunction />
-            <ButtonFunction />
-            <ButtonFunction /> */}
+        <ButtonFunction />
+        <ButtonFunction /> */}
         </div>
 
         {/* <div className="buttons-container bosrder-2 border-green-500">
-            <p className="font-semibold text-gray-500">Free Drink Stamp</p>
-            <p className="text-xs text-gray-500">Get a free drink at the canteen once you attend 6 events</p>
-        </div> */}
+        <p className="font-semibold text-gray-500">Free Drink Stamp</p>
+        <p className="text-xs text-gray-500">Get a free drink at the canteen once you attend 6 events</p>
+    </div> */}
       </div>
     </motion.div>
   );

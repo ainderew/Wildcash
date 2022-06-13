@@ -66,10 +66,13 @@ const LoginScreen: React.FC = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        toggleLoading();
         //handle login response
-        // console.log(data);
-        setAuth(data);
+        console.log(data);
+
+        // if (localStorage.getItem("accessToken") === null) {
+        localStorage.setItem("accessToken", JSON.stringify(data.accessToken));
+        // console.log("first login");
+        // }
 
         getUser(data);
       })
@@ -80,9 +83,10 @@ const LoginScreen: React.FC = () => {
       }); //insert server error module
   };
 
-  const getUser = (data:any) => {
+  const getUser = (data: any) => {
+    console.log("getting user");
+    // const ENDPOINT_EVENTS = "http://localhost:9000/user/acc-info"; //reminder set to secret
     const ENDPOINT_EVENTS = "https://wildcash.onrender.com/user/acc-info"; //reminder set to secret
-
 
     fetch(ENDPOINT_EVENTS, {
       method: "POST",
@@ -95,11 +99,14 @@ const LoginScreen: React.FC = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
+        toggleLoading();
         setAuth([auth, data]);
         navigate("/home");
       })
       .catch((err) => {
-        alert(err); //handle errors here
+        // alert(err); //handle errors here
+        console.log(err);
       });
   };
 

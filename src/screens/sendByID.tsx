@@ -30,7 +30,7 @@ const SendPointsByIDScreen: React.FC = () => {
     const URL_ENDPOINT = `https://wildcash.onrender.com/points/send`;
 
     const data = {
-      senderID: auth[0].userIdNumber,
+      senderID: auth[1].userIdNumber,
       receiverID,
       points: toSendPoints,
     };

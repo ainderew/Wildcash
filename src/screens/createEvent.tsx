@@ -3,8 +3,11 @@ import React, { useState } from "react";
 import Calendar from "../components/calendar";
 import HomeHeader from "../components/home-header";
 import InputField from "../components/input";
+import ModalEventQR from "./eventQR";
+
 
 const CreateEventScreen: React.FC = () => {
+  const [eventID, setEventId] = useState<string>("");
   const [eventName, setEventName] = useState<string>("");
   const [eventDescription, setEventDescription] = useState<string>("");
   const [eventPoints, setEventPoints] = useState<string>("");
@@ -16,6 +19,8 @@ const CreateEventScreen: React.FC = () => {
   const [startTime, setStartTime] = useState<string>();
   const [endTime, setEndTime] = useState<string>();
 
+  const [successFlag, setSuccessFlag] = useState<boolean>(false)
+
   const handleSelectOnChange = (
     e: React.ChangeEvent<HTMLSelectElement>,
     setter: Function
@@ -24,7 +29,7 @@ const CreateEventScreen: React.FC = () => {
   };
 
   const handleCreateEvent = () => {
-    const URL = "http://localhost:9000/event/set-schedule";
+    const URL = "https://wildcash.onrender.com/event/set-schedule";
     const eventData = {
       eventName: eventName,
       eventDay: selectedDay,
@@ -50,7 +55,10 @@ const CreateEventScreen: React.FC = () => {
         throw new Error("something went wrong");
       })
       .then((data) => {
+        setEventId(String(data));
+        setSuccessFlag(true);
         console.log(data); // replace with success modal, currently returns eventID;
+
       })
       .catch((error) => {
        alert(error) // replace with error modal
@@ -59,6 +67,8 @@ const CreateEventScreen: React.FC = () => {
 
   return (
     <div className="w-full h-screen bg-white grid grid-rows-[4rem_1fr]">
+      {successFlag ?  <ModalEventQR eventID={eventID} /> : null}
+     
       <HomeHeader />
       <div className="body p-8 flex flex-col gap-4">
         <InputField
