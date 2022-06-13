@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+
+import AuthContext from "../context/authContext";
 
 import logo from "../assets/logo.svg";
 import user from "../assets/user.svg";
@@ -12,27 +14,31 @@ import { fadeInUp, staggeredContainer } from "../variants";
 import ModalInvalidLogin from "../components/modals/modal-invalid-login";
 
 const LoginScreen: React.FC = () => {
-const navigate = useNavigate()
+  const { auth, setAuth } = useContext(AuthContext);
 
-  const ENDPOINT_LOGIN = "https://wildcash-authserver.onrender.com/login"; //reminder set to secret
+  // console.log(authContext?.setAuth)
+
+  const navigate = useNavigate();
+
+  const ENDPOINT_LOGIN = "https://wildcash-authserver.onrender.com/auth"; //reminder set to secret
+  // const ENDPOINT_LOGIN = "http://localhost:7000/auth"; //reminder set to secret
 
   const [userIdNum, setUserIdNum] = useState<string>("");
   const [pass, setPass] = useState<string>("");
   const [loadingFlag, setLoadingFlag] = useState<boolean>(false);
   const [invalidLoginFlag, setInvalidLoginFlag] = useState<boolean>(false);
 
-
   const toggleLoading = (): void => {
     setLoadingFlag((prev) => !prev);
   };
 
-  const toggleInvalidLoginFlag = () =>{
+  const toggleInvalidLoginFlag = () => {
     setInvalidLoginFlag(true);
 
-    setTimeout(() =>{
-      setInvalidLoginFlag(false)
-    },2000)
-  }
+    setTimeout(() => {
+      setInvalidLoginFlag(false);
+    }, 2000);
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -49,10 +55,10 @@ const navigate = useNavigate()
       password: pass,
     };
 
-
+    console.log(loginCredentials);
     fetch(ENDPOINT_LOGIN, {
-      mode: "cors",
       method: "POST",
+      mode: "cors",
       headers: {
         "Content-type": "Application/json",
       },
@@ -61,14 +67,39 @@ const navigate = useNavigate()
       .then((response) => response.json())
       .then((data) => {
         toggleLoading();
-        if (data.length === 0){
-          toggleInvalidLoginFlag();
-          return;
-        }
         //handle login response
-        console.log(data);
-        navigate("/home");
+        // console.log(data);
+        setAuth(data);
 
+        getUser(data);
+      })
+      .catch((err) => {
+        console.error(err);
+        toggleLoading();
+        toggleInvalidLoginFlag();
+      }); //insert server error module
+  };
+
+  const getUser = (data:any) => {
+    const ENDPOINT_EVENTS = "https://wildcash.onrender.com/user/acc-info"; //reminder set to secret
+
+
+    fetch(ENDPOINT_EVENTS, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Accept: "Application/json",
+        "Content-Type": "Application/json",
+        authorization: `Bearer ${data.accessToken}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setAuth([auth, data]);
+        navigate("/home");
+      })
+      .catch((err) => {
+        alert(err); //handle errors here
       });
   };
 
@@ -99,6 +130,7 @@ const navigate = useNavigate()
               setter={setUserIdNum}
               labelName="Student ID"
               icon={user}
+              type="text"
             />
           </motion.div>
 

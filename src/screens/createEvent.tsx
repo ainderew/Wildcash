@@ -1,20 +1,92 @@
+import React, { useState } from "react";
+
 import Calendar from "../components/calendar";
 import HomeHeader from "../components/home-header";
 import InputField from "../components/input";
 
 const CreateEventScreen: React.FC = () => {
+  const [eventName, setEventName] = useState<string>("");
+  const [eventDescription, setEventDescription] = useState<string>("");
+  const [eventPoints, setEventPoints] = useState<string>("");
+
+  const [selectedDay, setSelectedDay] = useState<number>(0);
+  const [selectedMonth, setSelectedMonth] = useState<number>(0);
+  const [selectedYear, setSelectedYear] = useState<number>(0);
+
+  const [startTime, setStartTime] = useState<string>();
+  const [endTime, setEndTime] = useState<string>();
+
+  const handleSelectOnChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    setter: Function
+  ): void => {
+    setter(e.target.value);
+  };
+
+  const handleCreateEvent = () => {
+    const URL = "http://localhost:9000/event/set-schedule";
+    const eventData = {
+      eventName: eventName,
+      eventDay: selectedDay,
+      eventMonth: selectedMonth,
+      eventYear: selectedYear,
+      startTime: startTime,
+      endTime: endTime,
+      eventPoints: eventPoints,
+      eventDescription: eventDescription,
+    };
+    fetch(URL, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      body: JSON.stringify(eventData),
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("something went wrong");
+      })
+      .then((data) => {
+        console.log(data); // replace with success modal, currently returns eventID;
+      })
+      .catch((error) => {
+       alert(error) // replace with error modal
+      });
+  };
+
   return (
     <div className="w-full h-screen bg-white grid grid-rows-[4rem_1fr]">
       <HomeHeader />
       <div className="body p-8 flex flex-col gap-4">
-        <InputField label="Event Name" type={"string"} />
-        <InputField label="Event Description" type={"string"} />
-        <InputField label="Points" type={"string"} />
+        <InputField
+          value={eventName}
+          setter={setEventName}
+          label="Event Name"
+          type={"string"}
+        />
+        <InputField
+          value={eventDescription}
+          setter={setEventDescription}
+          label="Event Description"
+          type={"string"}
+        />
+        <InputField
+          value={eventPoints}
+          setter={setEventPoints}
+          label="Points"
+          type={"string"}
+        />
 
         <div className="w-full flex gap-4">
           <div className="w-1/2">
             <p className="">Start Time</p>
-            <select className="w-full h-10 px-4 border-2 border-gray-300">
+            <select
+              onChange={(e) => handleSelectOnChange(e, setStartTime)}
+              className="w-full h-10 px-4 border-2 border-gray-300"
+            >
               <option value="7:00">7:00</option>
               <option value="7:00">8:00</option>
               <option value="7:00">9:00</option>
@@ -33,8 +105,11 @@ const CreateEventScreen: React.FC = () => {
 
           <div className="w-1/2">
             <p className="">End Time</p>
-            <select className="w-full h-10 px-4 border-2 border-gray-300">
-            <option value="7:00">7:00</option>
+            <select
+              onChange={(e) => handleSelectOnChange(e, setEndTime)}
+              className="w-full h-10 px-4 border-2 border-gray-300"
+            >
+              <option value="7:00">7:00</option>
               <option value="7:00">8:00</option>
               <option value="7:00">9:00</option>
               <option value="7:00">10:00</option>
@@ -51,10 +126,20 @@ const CreateEventScreen: React.FC = () => {
           </div>
         </div>
 
-        <Calendar />
+        <Calendar
+          selectedDay={selectedDay}
+          selectedMonth={selectedMonth}
+          selectedYear={selectedYear}
+          setSelectedDay={setSelectedDay}
+          setSelectedMonth={setSelectedMonth}
+          setSelectedYear={setSelectedYear}
+        />
 
         {/* <button className="w-full h-10 border-accent border-2 text-accent">Create Event</button> */}
-        <button className="w-full h-10 bg-accent text-white rounded-lg">
+        <button
+          onClick={handleCreateEvent}
+          className="w-full h-10 bg-accent text-white rounded-lg active:scale-90"
+        >
           Create Event
         </button>
       </div>
