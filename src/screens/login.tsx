@@ -14,10 +14,14 @@ import { fadeInUp, staggeredContainer } from "../variants";
 import ModalInvalidLogin from "../components/modals/modal-invalid-login";
 
 const LoginScreen: React.FC = () => {
-  // const { setAuth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
+
+  // console.log(authContext?.setAuth)
+
   const navigate = useNavigate();
 
-  const ENDPOINT_LOGIN = "https://wildcash-authserver.onrender.com/login"; //reminder set to secret
+  const ENDPOINT_LOGIN = "https://wildcash-authserver.onrender.com/auth"; //reminder set to secret
+  // const ENDPOINT_LOGIN = "http://localhost:7000/auth"; //reminder set to secret
 
   const [userIdNum, setUserIdNum] = useState<string>("");
   const [pass, setPass] = useState<string>("");
@@ -51,9 +55,10 @@ const LoginScreen: React.FC = () => {
       password: pass,
     };
 
+    console.log(loginCredentials);
     fetch(ENDPOINT_LOGIN, {
-      mode: "cors",
       method: "POST",
+      mode: "cors",
       headers: {
         "Content-type": "Application/json",
       },
@@ -62,14 +67,39 @@ const LoginScreen: React.FC = () => {
       .then((response) => response.json())
       .then((data) => {
         toggleLoading();
-
-        if (data.code === Error) {
-          toggleInvalidLoginFlag();
-          return;
-        }
         //handle login response
-        console.log(data);
+        // console.log(data);
+        setAuth(data);
+
+        getUser(data);
+      })
+      .catch((err) => {
+        console.error(err);
+        toggleLoading();
+        toggleInvalidLoginFlag();
+      }); //insert server error module
+  };
+
+  const getUser = (data:any) => {
+    const ENDPOINT_EVENTS = "https://wildcash.onrender.com/user/acc-info"; //reminder set to secret
+
+
+    fetch(ENDPOINT_EVENTS, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Accept: "Application/json",
+        "Content-Type": "Application/json",
+        authorization: `Bearer ${data.accessToken}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setAuth([auth, data]);
         navigate("/home");
+      })
+      .catch((err) => {
+        alert(err); //handle errors here
       });
   };
 
@@ -100,6 +130,7 @@ const LoginScreen: React.FC = () => {
               setter={setUserIdNum}
               labelName="Student ID"
               icon={user}
+              type="text"
             />
           </motion.div>
 

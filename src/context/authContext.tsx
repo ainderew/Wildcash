@@ -1,14 +1,32 @@
-import { createContext, useState } from "react";
+import React, { createContext, useState } from "react";
 
-const AuthContext = createContext({});
-
-export const AuthProvider = ({children}:any) =>{
-    const [auth, setAuth] = useState<any>()
-    return(
-        <AuthContext.Provider value={{auth,setAuth}}>
-            {children}
-        </AuthContext.Provider>
-    )
+interface props {
+  children: React.ReactNode;
 }
 
-export default AuthContext
+interface contextType {
+  auth: any;
+  setAuth: (value:any) => void
+}
+
+const initType:contextType ={
+    auth: "fd",
+    setAuth: function (){}
+}
+const AuthContext = createContext<contextType>(initType);
+
+export const AuthProvider = ({ children }: props) => {
+  const [auth, setAuth] = useState<any>({});
+
+  //   const value = React.useMemo(() => {
+  //     return { auth, setAuth };
+  //   }, [history]);
+
+  return (
+    <AuthContext.Provider value={{ auth, setAuth }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export default AuthContext;

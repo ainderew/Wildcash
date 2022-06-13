@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+
+import AuthContext from "../context/authContext";
 
 import { motion } from "framer-motion";
 import { fadeInUp } from "../variants";
@@ -10,16 +12,21 @@ import ButtonFunction from "../components/button-functions";
 
 //Images
 import scan_qr from "../assets/scan_qr.svg";
+import Loading from "../components/loading";
 
 const Home: React.FC = () => {
+  const { auth, setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [events, setEvents] = useState<any[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<any>([]);
+  const [loadingFlag, setLoadingFlag] = useState<boolean>(true);
 
   useEffect(() => {
     const getEvents = () => {
-      fetch("http://localhost:9000/event/get-events", {
+      const ENDPOINT_EVENTS = "https://wildcash.onrender.com/event/get-events"; //reminder set to secret
+
+      fetch(ENDPOINT_EVENTS, {
         method: "GET",
         mode: "cors",
         headers: {
@@ -28,15 +35,14 @@ const Home: React.FC = () => {
       })
         .then((response) => response.json())
         .then((data) => {
-          if (data instanceof Error) {
-            // HANDLE ERRROR
-            console.log(data);
-            return;
-          }
-          console.log(data);
           setEvents(data);
+          setLoadingFlag(false);
+        })
+        .catch((err) => {
+          alert("HOME: get events error: " + err); //replace with proper error handling
         });
     };
+
     getEvents();
   }, []);
   return (
@@ -53,16 +59,22 @@ const Home: React.FC = () => {
           <p className="text-base text-gray-400 font-medium">
             Available Points
           </p>
-          <p className="points text-3xl font-semibold text-accent">2805</p>
+          <p className="points text-3xl font-semibold text-accent">
+            {auth[1].accPoints}
+          </p>
         </div>
 
-        <div className="w-full h-full flex flex-col gap-4  z-[0]">
+        <div className="w-full h-full flex flex-col gap-4  z-[0] relative">
           <p className="text-gray-400 font-medium">Upcoming Events</p>
-          <div className="w-full h-full grid auto-rows-[4.5rem] gap-4 overflow-scroll">
-            {events.map((el: any, index: number) => {
-              return <EventContainer eventData={el} />;
-            })}
-          </div>
+          {loadingFlag ? (
+            <Loading />
+          ) : (
+            <div className="w-full h-full grid auto-rows-[4.5rem] gap-4 overflow-scroll">
+              {events.map((el: any, index: number) => {
+                return <EventContainer eventData={el} />;
+              })}
+            </div>
+          )}
         </div>
       </div>
 

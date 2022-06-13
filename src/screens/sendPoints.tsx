@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../context/authContext";
 
 import SendButtonsContainer from "../components/send-button-container";
 
@@ -9,11 +10,12 @@ import scan_qr from "../assets/scan_qr.svg";
 import id_img from "../assets/id_img.svg";
 
 const SendPointsScreen: React.FC = () => {
-  const [points] = useState<number>(2805);
+  const {auth} = useContext(AuthContext)
+
 
   const navigate = useNavigate();
   const handleBack = (): void => {
-    navigate("-1");
+    navigate(-1);
   };
 
   const handleSendThroughQR = () => {
@@ -32,7 +34,7 @@ const SendPointsScreen: React.FC = () => {
         <div className="flex flex-col items-center justify-center gap-6 ">
           <img src={points_logo} alt="" className="w-[5rem]" />
           <div className="">
-            <p className="font-semibold text-4xl text-center">{points}.00</p>
+            <p className="font-semibold text-4xl text-center">{auth[0].accPoints}</p>
             <p className="text-gray-400 text-xs text-center">
               Available Points
             </p>

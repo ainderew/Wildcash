@@ -6,7 +6,8 @@ module.exports = {
     extend: {
       colors:{
         main: "#FFC107",
-        accent: "#89343B"
+        accent: "#89343B",
+        bg_blur: "rgba(0,0,0,0.4)"
       }
     },
   },
