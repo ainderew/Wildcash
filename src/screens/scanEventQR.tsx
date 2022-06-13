@@ -42,8 +42,8 @@ const ScanEventScreen: React.FC = () => {
   };
 
   const handleSend = (eventID:string): void => {
-    // const URL_ENDPOINT = `https://wildcash.onrender.com/event/attendance`;
-    const URL_ENDPOINT = `http://localhost:9000/event/attendance`;
+    const URL_ENDPOINT = `https://wildcash.onrender.com/event/attendance`;
+    // const URL_ENDPOINT = `http://localhost:9000/event/attendance`;
 
     const data = {
       studentIdNumber: auth[1].userIdNumber,
