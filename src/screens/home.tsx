@@ -15,11 +15,11 @@ import scan_qr from "../assets/scan_qr.svg";
 import Loading from "../components/loading";
 
 const Home: React.FC = () => {
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [events, setEvents] = useState<any[]>([]);
-  const [selectedEvent, setSelectedEvent] = useState<any>([]);
+  // const [selectedEvent, setSelectedEvent] = useState<any>([]);
   const [loadingFlag, setLoadingFlag] = useState<boolean>(true);
 
   useEffect(() => {

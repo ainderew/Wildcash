@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/authContext";
 
@@ -18,9 +18,7 @@ const SendPointsScreen: React.FC = () => {
     navigate(-1);
   };
 
-  const handleSendThroughQR = () => {
-    navigate("/scan");
-  };
+
   return (
     <div className="w-full h-screen grid grid-rows-[4rem_1fr] px-4">
       <div className="header flex justify-between items-center relative">

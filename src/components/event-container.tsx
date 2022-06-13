@@ -29,9 +29,9 @@ const EventContainer: React.FC<props> = ({ eventData }: props) => {
   ];
 
 
-  const handleClick = ():void =>{
+  // const handleClick = ():void =>{
     
-  }
+  // }
 
 
   return (
